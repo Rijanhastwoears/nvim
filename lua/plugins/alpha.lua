@@ -1,4 +1,3 @@
--- lua/plugins/alpha.lua
 return {
   "goolord/alpha-nvim",
   event = "VimEnter",
@@ -33,6 +32,7 @@ return {
       dashboard.button("r", "  Recent files", ":Telescope oldfiles<CR>"),
       dashboard.button("f", "  Find file", ":Telescope find_files<CR>"),
       dashboard.button("e", "  Find folder", ":Neotree filesystem toggle<CR>"),
+      dashboard.button("t", "  Toggle WhichKey", ":WhichKeyToggle<CR>"),
       dashboard.button("q", "  Quit", ":qa<CR>"),
     }
 
