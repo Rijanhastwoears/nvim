@@ -5,6 +5,18 @@ return {
   config = function()
     local telescope = require("telescope")
     local actions = require("telescope.actions")
+    local action_state = require("telescope.actions.state")
+
+    -- Custom function to copy the path of the selected file
+    local function copy_path(prompt_bufnr)
+      local selection = action_state.get_selected_entry()
+      if selection then
+        local path = selection.path or selection.filename
+        vim.fn.setreg("+", path) -- Copy to system clipboard
+        print("Copied path: " .. path)
+        actions.close(prompt_bufnr) -- Close Telescope after copying
+      end
+    end
 
     telescope.setup({
       defaults = {
@@ -13,6 +25,11 @@ return {
           i = {
             -- Map 'ESC' to close Telescope, a common preference
             ["<esc>"] = actions.close,
+            -- Map '<C-y>' to copy path
+            ["<C-y>"] = copy_path,
+          },
+          n = {
+            ["<C-y>"] = copy_path,
           },
         },
       },
