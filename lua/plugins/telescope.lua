@@ -1,4 +1,3 @@
--- lua/plugins/telescope.lua
 return {
   "nvim-telescope/telescope.nvim",
   tag = "0.1.6", -- Pin to a specific version for stability
@@ -26,5 +25,6 @@ return {
     vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Find open buffers" })
     vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Find help tags" })
     vim.keymap.set("n", "<leader>fo", builtin.oldfiles, { desc = "Find recent files" })
+    vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "Find keymaps" })
   end,
 }

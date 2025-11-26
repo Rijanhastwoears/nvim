@@ -22,5 +22,6 @@ require("lazy").setup({
     { import = "plugins/telescope" },
     { import = "plugins/alpha" },
     { import = "plugins/supermaven" },
+    { import = "plugins/which-key"}
   }
 })
