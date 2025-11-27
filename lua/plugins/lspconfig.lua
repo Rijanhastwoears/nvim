@@ -10,8 +10,7 @@ return {
     -- or UI enhancers (e.g., lspsaga, lspkind) here if you use them.
   },
   config = function()
-    local lspconfig = require("lspconfig")
-    -- !! Crucial change: Get capabilities from the cmp-nvim-lsp plugin !!
+    -- Get capabilities from the cmp-nvim-lsp plugin
     -- This now works because cmp-nvim-lsp is listed as a direct dependency above.
     local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
@@ -31,48 +30,52 @@ return {
       print("LSP attached to buffer:", bufnr)
     end
 
-    -- *** Manually setup servers installed via Nix ***
+    -- *** Setup servers using the new vim.lsp.config API (Neovim 0.11+) ***
+    
+    -- Define server configurations
+    local servers = {
+      pyright = {
+        cmd = { "pyright-langserver", "--stdio" },
+        filetypes = { "python" },
+        root_markers = { "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", "Pipfile", ".git" },
+      },
+      lua_ls = {
+        cmd = { "lua-language-server" },
+        filetypes = { "lua" },
+        root_markers = { ".luarc.json", ".luarc.jsonc", ".luacheckrc", ".stylua.toml", "stylua.toml", "selene.toml", "selene.yml", ".git" },
+        settings = {
+          Lua = {
+            runtime = { version = 'LuaJIT' },
+            diagnostics = { globals = {'vim'} },
+            workspace = { library = vim.api.nvim_get_runtime_file("", true) },
+            telemetry = { enable = false },
+          },
+        },
+      },
+      nim_langserver = {
+        cmd = { "nimlangserver" },
+        filetypes = { "nim" },
+        root_markers = { "*.nimble", ".git" },
+      },
+      tinymist = {
+        cmd = { "tinymist" },
+        filetypes = { "typst" },
+        root_markers = { ".git" },
+      },
+    }
 
-    -- Setup pyright, passing the cmp capabilities
-    lspconfig.pyright.setup({
-      on_attach = on_attach,
-      capabilities = capabilities, -- Pass the capabilities here
-    })
-
-    -- Setup lua_ls, passing the cmp capabilities
-    lspconfig.lua_ls.setup({
-       on_attach = on_attach,
-       capabilities = capabilities, -- Pass the capabilities here
-       settings = {
-         Lua = {
-           runtime = { version = 'LuaJIT' },
-           diagnostics = { globals = {'vim'} },
-           workspace = { library = vim.api.nvim_get_runtime_file("", true) },
-           telemetry = { enable = false },
-         },
-       },
-    })
-
-    -- For nim_langserver
-    lspconfig.nim_langserver.setup({
-      on_attach = on_attach,
-      capabilities = capabilities,
-      -- Example setting from nim-lang/langserver docs if needed:
-      -- settings = {
-      --   nim = {
-      --     -- Specify path if it's not in PATH or you need a specific build
-      --     -- nimsuggestPath = "/path/to/your/nimsuggest",
-      --     -- nimlangserverPath = "/path/to/your/nimlangserver"
-      --   }
-      -- }
-    })
-
-    lspconfig.tinymist.setup({
-        on_attach = on_attach,
-        capabilities = capabilities
-    })
-    -- Add setup calls here for any other LSP servers installed via Nix
-    -- lspconfig.some_other_server.setup({ on_attach = on_attach, capabilities = capabilities })
+    -- Register and enable each server
+    for name, config in pairs(servers) do
+      -- Add common settings to each server config
+      config.capabilities = capabilities
+      config.on_attach = on_attach
+      
+      -- Register the server configuration
+      vim.lsp.config(name, config)
+      
+      -- Enable the server for its filetypes
+      vim.lsp.enable(name)
+    end
 
   end,
 }
