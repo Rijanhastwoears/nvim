@@ -20,11 +20,23 @@ return {
         -- Use a floating window for the file explorer
         position = "float",
         width = 40, -- The width of the floating window
+        mappings = {
+          ["Y"] = "copy_relative_path",
+        },
         -- You can add more floating window options from nui.nvim if needed.
         -- For example, to slightly dim the editor background when neo-tree is open:
         -- win_options = {
         --   winblend = 10,
         -- },
+      },
+      commands = {
+        copy_relative_path = function(state)
+          local node = state.tree:get_node()
+          local content = node.path
+          local relative_path = vim.fn.fnamemodify(content, ":.")
+          vim.fn.setreg("+", relative_path)
+          vim.notify("Copied relative path: " .. relative_path)
+        end,
       },
       -- Add git status indicators to files and directories
       git_status = {

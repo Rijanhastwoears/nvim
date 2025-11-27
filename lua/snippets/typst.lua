@@ -45,4 +45,19 @@ return {
     i(0), -- Second placeholder for the content, and the final cursor position
     t({"", "]"}), -- Adds a newline before the closing bracket
   }),
+
+  -- Defines a snippet for rendering a delimited file as a table, triggered by "table"
+  s("table", fmt(
+    [[#table(
+      columns: {},
+      ..csv("{}", delimiter: "{}").flatten()
+    ){}]],
+        {
+          i(1, "3"), -- Number of columns
+          i(2, "Header"), -- Header content (can be expanded to multiple headers)
+          i(3, "data.csv"), -- Path to the CSV/delimited file
+          i(4, ","), -- Delimiter character (default: comma)
+          i(0), -- Final cursor position
+        }
+  )),
 }
