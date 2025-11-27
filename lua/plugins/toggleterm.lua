@@ -25,6 +25,10 @@ return {
       },
     })
 
+    vim.keymap.set('n', '<leader>th', '<cmd>ToggleTerm direction=horizontal<cr>', {desc = "Toggle Horizontal Term"})
+    vim.keymap.set('n', '<leader>tv', '<cmd>ToggleTerm direction=vertical<cr>', {desc = "Toggle Vertical Term"})
+    vim.keymap.set('n', '<leader>tf', '<cmd>ToggleTerm direction=float<cr>', {desc = "Toggle Floating Term"})
+
     function _G.set_terminal_keymaps()
       local opts = {noremap = true}
       vim.api.nvim_buf_set_keymap(0, 't', '<esc>', [[<C-\><C-n>]], opts)
