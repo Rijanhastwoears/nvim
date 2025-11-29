@@ -22,13 +22,13 @@ return {
 
   -- Defines a snippet for a figure, triggered by "fig"
   s("fig", fmt(
-[[#figure(
-  image("{}", width: 70%),
-  caption: [
-    {}
-  ]
-) <fig:{}>{}
-]],
+    [[#figure(
+      image("{}", width: 70%),
+      caption: [
+        {}
+      ]
+    ) <fig:{}>{}
+    ]],
     {
       i(1, "path/to/image.png"),
       i(2, "Caption text"),
@@ -45,4 +45,17 @@ return {
     i(0), -- Second placeholder for the content, and the final cursor position
     t({"", "]"}), -- Adds a newline before the closing bracket
   }),
+
+  -- Defines a snippet for a table, triggered by "table"
+  s("table", fmt(
+    [[#table(
+      columns: {},
+      ..csv("{}", delimiter: ",").flatten()
+    ){}]],
+    {
+      i(1, ""), -- Number of columns
+      i(2, ""), -- Path to CSV file
+      i(0), -- Final cursor position
+    }
+  )),
 }
